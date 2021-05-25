@@ -16,8 +16,9 @@ def home(request):
     }
     return render(request, 'posts/home.html', context)
 
+
 def detail(request, slug):
-    post = get_object_or_404(Post,slug=slug)
+    post = get_object_or_404(Post, slug=slug)
     comments = post.comments.filter(parent__isnull=True)
     is_liked = post.likes.filter(username=request.user.username).exists()
     is_disliked = post.dislikes.filter(username=request.user.username).exists()
@@ -30,9 +31,11 @@ def detail(request, slug):
     }
     return render(request, 'posts/detail.html', context)
 
+
 def search(request):
     field = request.GET['search']
-    posts = Post.objects.filter(Q(title__icontains=field) | Q(content__icontains=field)) # change it to tags later
+    posts = Post.objects.filter(Q(title__icontains=field) | Q(
+        content__icontains=field))  # change it to tags later
     categories = Category.objects.all()
 
     context = {
@@ -40,7 +43,7 @@ def search(request):
         "categories": categories
     }
     return render(request, 'posts/home.html', context)
-    
+
 
 def like(request, slug, is_liked):
     post = get_object_or_404(Post, slug=slug)
@@ -55,7 +58,6 @@ def like(request, slug, is_liked):
         return redirect('posts:home')
     return redirect(reverse('posts:detail', kwargs={"slug": slug}))
 
-    
 
 def subscribe(request, id):
     pass
