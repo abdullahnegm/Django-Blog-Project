@@ -1,0 +1,63 @@
+{%extends 'layout/base.html'%}
+{%block body_block %}
+
+    <center>
+    {% if user.is_superuser and not post.user.is_staff %}
+      <form method="POST" action="{% url 'users:promote' post.user.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="slug" value="{{ post.slug }}"/>
+        <input type="submit" value="Promote"/>
+      </form>
+    {% endif %}
+    <br />
+    <br />
+    </center>
+    <center>
+    {% if user.is_superuser and not post.user.is_superuser and not post.user.is_staff %}
+      <form method="POST" action="{% url 'users:block' post.user.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="slug" value="{{ post.slug }}"/>
+        <input type="submit" {% if post.user.is_active %} value="Block" {% else %} value="unblock" {% endif %} />
+      </form>
+    {% endif %}
+    <br />
+    <br />
+    </center>
+    <center>
+      <a href="{% url 'posts:detail' post.slug %}">
+        <img src="{{ post.image.url }}" width="300" height="300" />
+      </a>
+      <br />
+      <h1>{{ post.title }}</h1>
+      <br />
+      <h1>{{ post.content }}</h1>
+      <br />
+      <h1>{{ post.publish }}</h1>
+      {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'posts:like' post.slug is_liked %}">
+          {% csrf_token %}
+            <input type="submit" {% if is_liked %} style="background-color: red" {% endif %} value="Like"/>
+        </form>
+        <form method="POST" action="{% url 'posts:like' post.slug is_liked %}">
+            {% csrf_token %}
+            <input type="submit" {% if is_disliked %} style="background-color: red" {% endif %} value="Dislike"/>
+        </form>
+      {% endif %}
+      <h1 style="color: blue;"> likes: {{ post.like_count }} </h1>
+    </center>
+    <hr />
+    <hr />
+    <hr />
+    {% for comment in comments %} 
+      <h4>
+        {{ comment.content }} 
+         - {{ comment.user.username }}
+         - {{ comment.date }}
+      </h4>
+      {% for reply in comment.replies.all %} 
+        {{ reply.content }} 
+         - {{ reply.user.username }}
+         - {{ reply.date }}
+      {% endfor %} 
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,27 @@
+{%extends 'layout/base.html'%}
+{%block body_block %}
+
+    <center>
+      <form action="{% url 'posts:search' %}">
+        {% csrf_token %}
+        <input type="text" name="search"/>
+        <input type="submit" value="Search"/>
+      </form>
+      {% for post in posts %}
+      <a href="{% url 'posts:detail' post.slug %}"
+        ><img src="{{ post.image.url }}" width="300" height="300"
+      /></a>
+      <br />
+      <h1>{{ post.title }}</h1>
+      <br />
+      <h1>{{ post.content }}</h1>
+      <br />
+      <h1>{{ post.publish }}</h1>
+      <br />
+      <hr />
+      <hr />
+      <hr />
+      {% endfor %}
+    </center>
+
+{% endblock %}
