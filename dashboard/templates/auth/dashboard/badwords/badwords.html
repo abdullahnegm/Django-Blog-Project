@@ -1,0 +1,33 @@
+{%extends 'dashboard/layout/base.html'%}
+{% block title_block %}
+<div>
+    <h1>All Badwords</h1>
+</div>
+{% endblock %}
+{%block body_block %}
+<div class="mb-4">
+    <a href="/auth/add/badword" class="btn btn-primary">Add New Word</a>
+</div>
+<div class="row">
+    <div class="col-6 offset-3">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Badwords</th>
+                    <th scope="col" colspan="2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for badword in data%}
+                <tr>
+                    <td><a href="/auth/badword_details/{{badword.id}}"><h5>{{badword.badword}}</h5></a></td>
+                    <td><a href="/auth/badword/edit/{{badword.id}}" class="btn btn-secondary">Edit</a></td>
+                    <td><a href="/auth/badword/delete/{{badword.id}}" class="btn btn-danger">Delete</a></td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
