@@ -1,0 +1,28 @@
+{%extends 'dashboard/layout/base.html'%}
+{% block title_block %}
+<h1>Category Details</h1>
+<div class="mb-4">
+    <a href="/auth/categories" class="btn btn-primary">Back</a>
+</div>
+{% endblock %}
+
+{% block body_block %}
+<div class="row">
+    <div class="col-6 offset-3">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Category</td>
+                    <td><h3>{{data.name}}</h3></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
