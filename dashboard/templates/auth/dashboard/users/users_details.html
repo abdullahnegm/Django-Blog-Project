@@ -1,0 +1,46 @@
+{%extends 'dashboard/layout/base.html'%}
+{% block title_block %}
+<h1>User Details</h1>
+<div class="mb-4">
+    <a href="/auth/users" class="btn btn-primary">Back</a>
+</div>
+{% endblock %}
+
+{% block body_block %}
+<div class="row">
+    <div class="col-10 offset-1">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">User Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Is_Admin</th>
+                    <th scope="col">Is_Block</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><h5>{{data.username}}</h5></td>
+                    <td><h5>{{data.email}}</h5></td>
+                    {%if data.is_superuser%}
+                        <td><h5>admin</h5></td>
+                    {%endif%}
+                    {%if not data.is_superuser%}
+                        <td><h5>user</h5></td>
+                    {%endif%}
+                    {%if data.is_active%}
+                    <td>
+                        <h5>Active</h5>
+                    </td>
+                    {%endif%}
+                    {%if not data.is_active%}
+                    <td>
+                        <h5>Blocked</h5>
+                    </td>
+                    {%endif%}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

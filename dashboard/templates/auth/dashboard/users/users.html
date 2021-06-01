@@ -1,0 +1,50 @@
+{%extends 'dashboard/layout/base.html'%}
+{% block title_block %}
+<div>
+    <h1>All Users</h1>
+</div>
+{% endblock %}
+{%block body_block %}
+<div class="mb-4">
+    <a href="/auth/add/user" class="btn btn-primary">Add New user</a>
+</div>
+<div class="row">
+    <div class="col-10 offset-1">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">User Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col" colspan="3">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for user in data%}
+                {%if user.is_superuser%}
+                <tr class="bg-warning">
+                        <td><a href="/auth/user_details/{{user.id}}" class="text-dark"><h5>{{user.username}}</h5></a></td>
+                        <td colspan="2"><h5>{{user.email}}</h5></td>
+                        <td colspan="2"><h5>admin</h5></td>
+                </tr>
+                {%endif%}
+                {%if not user.is_superuser%}
+                <tr class="bg-info">
+                    <td><a href="/auth/user_details/{{user.id}}" class="text-dark"><h5>{{user.username}}</h5></a></td>
+                    <td><h5>{{user.email}}</h5></td>
+                    {%if user.is_active%}
+                        <td><a href="/auth/user/block/{{user.id}}" class="btn btn-secondary">Block</a></td>
+                    {%endif%}
+                    {%if not user.is_active%}
+                        <td><a href="/auth/user/unblock/{{user.id}}" class="btn btn-secondary">UnBlock</a></td>
+                    {%endif%}
+                    <td><a href="/auth/user/promote/{{user.id}}" class="btn btn-success">Promote</a></td>
+                    <td><a href="/auth/user/delete/{{user.id}}" class="btn btn-danger">Delete</a></td>
+                </tr>
+                {%endif%}
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
