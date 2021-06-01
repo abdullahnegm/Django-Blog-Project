@@ -25,6 +25,21 @@ class CategoriesForm(forms.ModelForm):
 
 
 class UserForm(UserCreationForm):
+
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput(
+        attrs={'class': 'form-control', 'type': 'password', 'align': 'center', 'placeholder': 'password'}),
+    )
+
+    password2 = forms.CharField(
+        label="Confirm password",
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control', 'type': 'password', 'align': 'center', 'placeholder': 'password'}),
+    )
+
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'email']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control', 'type': 'text', 'align': 'center', 'placeholder': 'UserName'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'type': 'email', 'align': 'center', 'placeholder': 'Email', 'required': True}),
+        }
