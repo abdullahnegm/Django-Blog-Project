@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.http.response import HttpResponse, HttpResponseRedirect
-from dashboard.forms import BadwordsForm , CategoriesForm
+from dashboard.forms import BadwordsForm, CategoriesForm
 from posts.models import Badwords
 from posts.models import Category
+from django.contrib.auth.models import User
 # Create your views here.
 
 
@@ -92,10 +93,60 @@ def edit_categories(request, category_id):
             return HttpResponseRedirect('/auth/categories')
 
     context = {'categories_form': categories_form}
-    return render(request, 'auth/dashboard/categories/categories_form.html', context)    
+    return render(request, 'auth/dashboard/categories/categories_form.html', context)
 
 
 def delete_categories(request, category_id):
     categories = Category.objects.get(id=category_id)
     categories.delete()
     return HttpResponseRedirect("/auth/categories")
+
+# users
+
+
+def all_users(request):
+    users = User.objects.all()
+    context = {"data": users}
+    return render(request, 'auth/dashboard/users/users.html', context)
+
+
+def add_user(request):
+    context = {"data": "users"}
+    return render(request, 'auth/dashboard/users/users_form.html', context)
+
+
+def user_details(request, user_id):
+    user = User.objects.get(id=user_id)
+    context = {"data": user}
+    return render(request, 'auth/dashboard/users/users_details.html', context)
+
+
+def block(request, user_id):
+    user = User.objects.get(id=user_id)
+    if user.is_active:
+        user.is_active = False
+    user.save()
+    return HttpResponseRedirect("/auth/users")
+
+
+def un_block(request, user_id):
+    user = User.objects.get(id=user_id)
+    if not user.is_active:
+        user.is_active = True
+    user.save()
+    return HttpResponseRedirect("/auth/users")
+
+
+def promote(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.is_staff = True
+    user.is_superuser = True
+    user.is_active = True
+    user.save()
+    return HttpResponseRedirect("/auth/users")
+
+
+def delete_user(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.delete()
+    return HttpResponseRedirect("/auth/users")
