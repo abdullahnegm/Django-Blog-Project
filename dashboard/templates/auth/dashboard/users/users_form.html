@@ -4,15 +4,22 @@
 {% endblock %}
 
 {% block body_block %}
-<!-- <div class="row">
+<div class="row">
     <div class="col-6 offset-3">
         <form method="POST" class="form-group">
             {%csrf_token%}
-            {{categories_form.as_p}}
-            <button type="submit" class="btn btn-success form-control mb-3">Save</button>
+            {{user_form.username.label}}
+            {{user_form.username}}
+            {{user_form.email.label}}
+            {{user_form.email}}
+            {{user_form.password1.label}}
+            {{user_form.password1}}
+            {{user_form.password2.label}}
+            {{user_form.password2}}
+            <button type="submit" class="btn btn-success form-control mb-3 mt-2">Save</button>
             <button type="reset" class="btn btn-danger form-control">Clear</button>
         </form>
     </div>
-</div> -->
+</div>
 {{data}}
 {% endblock %}
