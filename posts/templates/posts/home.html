@@ -2,11 +2,6 @@
 {%block body_block %}
 
     <center>
-      <form action="{% url 'posts:search' %}">
-        {% csrf_token %}
-        <input type="text" name="search"/>
-        <input type="submit" value="Search"/>
-      </form>
       {% for post in posts %}
       <a href="{% url 'posts:detail' post.slug %}"
         ><img src="{{ post.image.url }}" width="300" height="300"

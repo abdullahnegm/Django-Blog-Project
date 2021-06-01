@@ -16,7 +16,7 @@ class Comment(models.Model):
         return self.parent is None
 
     is_parent.boolean = True
-    is_parent.short_description = "Comment"
+    is_parent.short_description = "Parent"
 
     def __str__(self):
         return self.user.username

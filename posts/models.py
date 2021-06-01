@@ -10,6 +10,8 @@ class Category(models.Model):
     name = models.CharField(max_length = 30)
     subscribers = models.ManyToManyField(User, blank=True, related_name="subscribers")
 
+    def get_url(self):
+        return f"home?category={self.name}"
 
     def __str__(self):
         return self.name
@@ -28,7 +30,7 @@ class Post(models.Model):
     content = models.TextField(max_length = 600)
     image = models.ImageField(upload_to = "posts")
     publish = models.DateField(auto_now_add = True)
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, related_name="categories", blank=True)
     slug = models.SlugField(primary_key=True, db_index=True)
     likes = models.ManyToManyField(User, related_name="likes", blank=True)
     dislikes = models.ManyToManyField(User, related_name="dislikes", blank=True)

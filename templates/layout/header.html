@@ -30,10 +30,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Home</a>
+                    <a href="{% url 'posts:home' %}" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Search</a>
+                    <a href="#" class="nav-link" data-widget="navbar-search" role="button">Search</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="{% url 'posts:create' %}" class="nav-link">Create Post</a>
                 </li>
             </ul>
 
@@ -45,10 +48,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <i class="fas fa-search"></i>
                     </a>
                     <div class="navbar-search-block">
-                        <form class="form-inline">
+                        <form action="{% url 'posts:search' %}">
+                            {% csrf_token %}
                             <div class="input-group input-group-sm">
-                                <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                                    aria-label="Search">
+                                <input class="form-control form-control-navbar" name="search" type="search" placeholder="Search"aria-label="Search">
+
                                 <div class="input-group-append">
                                     <button class="btn btn-navbar" type="submit">
                                         <i class="fas fa-search"></i>
@@ -104,7 +108,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Admin Name</a>
+                        <a href="#" class="d-block">{{ user.username }}</a>
                     </div>
                 </div>
 
@@ -136,18 +140,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Sports</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Sports</p>
-                                    </a>
-                                </li>
+                                {% for category in categories %}
+                                    <li class="nav-item">
+                                        <a href="{{ category.get_url }}" class="nav-link active">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>{{ category.name }}</p>
+                                        </a>
+                                    </li>
+                                {% endfor %}
 
                             </ul>
                         </li>
@@ -170,7 +170,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{% url 'posts:home' %}">Home</a></li>
                                 <li class="breadcrumb-item active">Home Page</li>
                             </ol>
                         </div><!-- /.col -->

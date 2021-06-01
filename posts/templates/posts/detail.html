@@ -2,6 +2,9 @@
 {%block body_block %}
 
     <center>
+    {% if user == post.user %}
+      <button class="btn btn-danger"><a href="{% url 'posts:edit' post.slug %}">Edit Post</a></button>
+    {% endif %}
     {% if user.is_superuser and not post.user.is_staff %}
       <form method="POST" action="{% url 'users:promote' post.user.id %}">
         {% csrf_token %}
@@ -48,6 +51,14 @@
     <hr />
     <hr />
     <hr />
+    <form action="{% url 'comments:create' post.slug %}" method="POST">
+      {% csrf_token %}
+      {{ comment_form.as_p }}
+      <input type="submit" value="Comment"/>
+    </form>
+    <hr />
+    <hr />
+    <hr />
     {% for comment in comments %} 
       <h4>
         {{ comment.content }} 
@@ -58,6 +69,12 @@
         {{ reply.content }} 
          - {{ reply.user.username }}
          - {{ reply.date }}
-      {% endfor %} 
+      {% endfor %}
+      <form action="{% url 'comments:create' post.slug %}" method="POST">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <input type="hidden" value="{{ comment.id }}" name="reply"/>
+        <input type="submit" value="Comment"/>
+      </form> 
     {% endfor %}
 {% endblock %}
