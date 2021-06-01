@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http.response import HttpResponse, HttpResponseRedirect
-from dashboard.forms import BadwordsForm, CategoriesForm
+from dashboard.forms import BadwordsForm, CategoriesForm, UserForm
 from posts.models import Badwords
 from posts.models import Category
 from django.contrib.auth.models import User
@@ -111,7 +111,14 @@ def all_users(request):
 
 
 def add_user(request):
-    context = {"data": "users"}
+    user_form = UserForm()
+    if request.method == 'POST':
+        user_form = UserForm(request.POST)
+        if user_form.is_valid():
+            user_form.save()
+            return HttpResponseRedirect("/auth/users")
+
+    context = {"user_form": user_form}
     return render(request, 'auth/dashboard/users/users_form.html', context)
 
 
