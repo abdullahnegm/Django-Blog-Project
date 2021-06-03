@@ -6,24 +6,41 @@
 {% endblock %} {% block body_block %}
 <div class="row">
     <div class="col-6 offset-3">
-        {% if user == post.user %}
-        <button class="btn btn-danger">
-            <a href="{% url 'dashboard:editpost' post.slug %}">Edit Post</a>
-        </button>
-        {% endif %}
-        
         <div class="container-fluid">
             <div class="row">
-                <div class="col-8 offset-1">
+                <div class="col-md-12">
                     <div class="post-content">
-                        <h1>{{post.title}}</h1>
-                        <h1>{{post.content}}</h1>
-                        <img src={{post.image.url}} style="width: 200px; height:150px;" alt="post image"/>
-                        <h1>{{post.publish | timesince}}</h1>
+                        <div class="card mb-3">
+                            <img
+                                src="{{post.image.url}}"
+                                class="card-img-top"
+                                alt="{{post.title}}"
+                            />
+                            <div class="card-body">
+                                <h5 class="card-title">{{post.title}}</h5>
+                                <p class="card-text">{{post.content }}</p>
+                                <div class="d-flex justify-content-between">
+                                    <p class="card-text">
+                                        <small class="text-muted"
+                                            >{{post.publish | timesince}}</small
+                                        >
+                                    </p>
+                                    {% if user == post.user %}
+                                    <button class="btn btn-primary mb-3">
+                                        <a
+                                            class="text-light"
+                                            href="{% url 'dashboard:editpost' post.slug %}"
+                                            >Edit Post</a
+                                        >
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
 
                 <form action="{% url 'comments:create' post.slug %}" method="POST">
                     {% csrf_token %}
@@ -52,19 +69,8 @@
                     </form> 
                   {% endfor %}
 
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
 {% endblock %}
-
-<!--    "post": post,
-        "comments": comments,
-        "comment_form": comment_form -->
-<!--  -->
-        <!-- # user -->
-<!-- # title -->
-<!-- # image -->
-<!-- # publish -->
-<!-- # content -->
-<!-- # slug -->
