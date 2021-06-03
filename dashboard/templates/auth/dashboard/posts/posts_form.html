@@ -1,16 +1,16 @@
 {%extends 'dashboard/layout/base.html'%}
 {% block title_block %}
-<h1>Post</h1>
 {% endblock %}
 
 {% block body_block %}
 <div class="row">
     <div class="col-6 offset-3">
+        <h1 class="alert text-center alert-secondary w-100 mt-3">Add New Post!</h1>
+
         <form class="form" enctype="multipart/form-data" method="POST" class="form-group">
             {%csrf_token%}
             {{post_form.as_p}}
-            
-            <button type="submit" class="btn btn-success form-control mb-3">Save</button>
+            <button type="submit" class="btn btn-primary form-control mb-3">Save</button>
             <button type="reset" class="btn btn-danger form-control">Clear</button>
         </form>
     </div>

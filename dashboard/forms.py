@@ -24,20 +24,8 @@ class CategoriesForm(forms.ModelForm):
 
 
 class PostsForm(forms.Form):
-    title = forms.CharField()
-    content = forms.CharField(widget=forms.Textarea())
-    image = forms.ImageField()
-    categories = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=(
+    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    content = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
+    image = forms.FileField(widget=forms.FileInput(attrs={'class': 'btn btn-default btn-file w-100'}))
+    categories = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class': ''}), choices=(
         (category.id, category.name) for category in Category.objects.all()))
-
-
-
-
-# user
-# title
-# image
-# publish
-# content
-# slug
-# likes
-# dislikes
