@@ -1,11 +1,12 @@
 {%extends 'dashboard/layout/base.html'%}
 {% block title_block %}
-<h1>User</h1>
+
 {% endblock %}
 
 {% block body_block %}
 <div class="row">
-    <div class="col-6 offset-3">
+    <div class="col-6 offset-3 mt-4">
+        <h1 class="alert text-center alert-secondary w-100 mt-3">Add New User!</h1>
         <form method="POST" class="form-group">
             {%csrf_token%}
             {{user_form.username.label}}

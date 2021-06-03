@@ -32,4 +32,11 @@ urlpatterns = [
     path("auth/user/promote/<user_id>", views.promote),
     path("auth/user/delete/<user_id>", views.delete_user),
 
+
+    # posts urls
+    path("auth/posts", views.all_posts, name="allposts"),
+    path("auth/add/post", views.add_posts, name="addnewpost"),
+    path("auth/post_details/<slug>", views.posts_details, name="postdetails"),
+    path("auth/post/edit/<slug>", views.edit_posts, name="editpost"),
+    path("auth/post/delete/<slug>", views.delete_posts, name="deletepost")
 ]
