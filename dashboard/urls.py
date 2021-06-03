@@ -5,7 +5,7 @@ from dashboard import views
 app_name = "dashboard"
 
 urlpatterns = [
-    path('auth/home', views.home),
+    path('auth/home', views.home, name="home"),
 
 
 

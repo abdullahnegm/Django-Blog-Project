@@ -54,5 +54,10 @@ class PostsForm(forms.Form):
         attrs={'class': 'form-control'}))
     image = forms.FileField(widget=forms.FileInput(
         attrs={'class': 'btn btn-default btn-file w-100'}))
-    categories = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class': ''}), choices=(
-        (category.id, category.name) for category in Category.objects.all()))
+    # categories = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class': ''}), choices=(
+    #     (category.id, category.name) for category in Category.objects.all()))
+    categories = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(attrs={'class': ''}), choices=Category.objects.values_list('id', 'name'))
+
+    def __init__(self, *args, **kwargs):
+        super(PostsForm,self).__init__(*args, **kwargs)
+        self.fields['categories'].choices = Category.objects.values_list('id', 'name')

@@ -6,6 +6,7 @@ from posts.models import Category
 from django.contrib.auth.models import User
 from dashboard.forms import BadwordsForm, CategoriesForm, PostsForm
 from comments.forms import commentForm
+from comments.models import Comment
 from posts.models import *
 import os
 from django.urls import reverse
@@ -17,7 +18,10 @@ from FinalBlog.settings import MEDIA_ROOT
 
 def home(request):
     context = {
-        "admin": "admin dashboard",
+        "users": User.objects.all().count(),
+        "posts": Post.objects.all().count(),
+        "comments": Comment.objects.all().count(),
+        "categories": Category.objects.all().count()
     }
     return render(request, 'auth/dashboard/home.html', context)
 

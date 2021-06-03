@@ -25,6 +25,9 @@ def login_view(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
+            
+            if user.is_staff:
+                return redirect('dashboard:home')
             return redirect('posts:home')
     context = {
         "form": form
