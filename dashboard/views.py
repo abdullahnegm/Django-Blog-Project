@@ -1,8 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http.response import HttpResponse, HttpResponseRedirect
-from dashboard.forms import BadwordsForm , CategoriesForm
-from posts.models import Badwords
-from posts.models import Category
+from dashboard.forms import BadwordsForm , CategoriesForm, PostsForm
+from comments.forms import commentForm
+from posts.models import *
+import os
+from django.urls import reverse
+from FinalBlog.settings import MEDIA_ROOT
 # Create your views here.
 
 
@@ -99,3 +102,83 @@ def delete_categories(request, category_id):
     categories = Category.objects.get(id=category_id)
     categories.delete()
     return HttpResponseRedirect("/auth/categories")
+
+
+# posts
+def all_posts(request):
+    posts = Post.objects.all()
+    context = {"data": posts}
+    return render(request, 'auth/dashboard/posts/posts.html', context)
+
+
+def add_posts(request):
+    form = PostsForm(request.POST or None, request.FILES or None)
+    if request.method == 'POST' and form.is_valid():
+        post = Post(title=form.cleaned_data['title'], content=form.cleaned_data['content'] , image=form.cleaned_data['image'])
+        post.user = request.user
+        print(post)
+        post.save()
+        for id in form.cleaned_data['categories']:
+            category = get_object_or_404(Category, id=int(id))
+            post.categories.add(category)
+        return redirect('dashboard:allposts')
+    context = {
+        "post_form": form
+    }
+    return render(request, "auth/dashboard/posts/posts_form.html", context)
+
+
+def edit_posts(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    if request.user != post.user:
+        return redirect(reverse('dashboard:postdetails', kwargs={'slug': slug}))
+    form = PostsForm(request.POST or None, request.FILES or None, initial={
+        "title": post.title,
+        "content": post.content,
+        "image": post.image,
+        "categories": [ category.id for category in post.categories.all() ]
+        })
+    if request.method == 'POST' and form.is_valid():
+        if post.image != form.cleaned_data["image"]:
+            os.remove(os.path.join(MEDIA_ROOT, f"{post.image}"))
+
+        post.title=form.cleaned_data['title']
+        post.content=form.cleaned_data['content']
+        post.image=form.cleaned_data['image']
+        post.user = request.user
+        post.save()
+
+        for id in form.cleaned_data['categories']:
+            category = get_object_or_404(Category, id=int(id))
+            post.categories.add(category)
+
+        return redirect(reverse('dashboard:postdetails', kwargs={"slug":slug}))
+
+    context = {
+        "form": form,
+        "post": post
+    }
+    return render(request, 'auth/dashboard/posts/posts_edit.html', context)
+
+
+def posts_details(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    comments = post.comments.filter(parent__isnull=True)
+    is_liked = post.likes.filter(username=request.user.username).exists()
+    is_disliked = post.dislikes.filter(username=request.user.username).exists()
+
+    comment_form = commentForm()
+    context = {
+        "post": post,
+        "comments": comments,
+        "is_liked": is_liked,
+        "is_disliked": is_disliked,
+        "comment_form": comment_form
+    }
+    return render(request, 'auth/dashboard/posts/posts_details.html', context)
+
+def delete_posts(request, slug):
+    posts = Post.objects.get(slug=slug)
+    posts.delete()
+    return HttpResponseRedirect("/auth/posts")
+    

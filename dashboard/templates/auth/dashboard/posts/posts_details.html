@@ -1,0 +1,70 @@
+{%extends 'dashboard/layout/base.html'%} {% block title_block %}
+<h1>Post Details</h1>
+<div class="mb-4">
+    <a href="/auth/posts" class="btn btn-primary">Back</a>
+</div>
+{% endblock %} {% block body_block %}
+<div class="row">
+    <div class="col-6 offset-3">
+        {% if user == post.user %}
+        <button class="btn btn-danger">
+            <a href="{% url 'dashboard:editpost' post.slug %}">Edit Post</a>
+        </button>
+        {% endif %}
+        
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-8 offset-1">
+                    <div class="post-content">
+                        <h1>{{post.title}}</h1>
+                        <h1>{{post.content}}</h1>
+                        <img src={{post.image.url}} style="width: 200px; height:150px;" alt="post image"/>
+                        <h1>{{post.publish | timesince}}</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <form action="{% url 'comments:create' post.slug %}" method="POST">
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <input type="submit" value="Comment"/>
+                  </form>
+                  <hr />
+                  <hr />
+                  <hr />
+                  {% for comment in comments %} 
+                    <h4>
+                      {{ comment.content }} 
+                       - {{ comment.user.username }}
+                       - {{ comment.date }}
+                    </h4>
+                    {% for reply in comment.replies.all %} 
+                      {{ reply.content }} 
+                       - {{ reply.user.username }}
+                       - {{ reply.date }}
+                    {% endfor %}
+                    <form action="{% url 'comments:create' post.slug %}" method="POST">
+                      {% csrf_token %}
+                      {{ comment_form.as_p }}
+                      <input type="hidden" value="{{ comment.id }}" name="reply"/>
+                      <input type="submit" value="Comment"/>
+                    </form> 
+                  {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<!--    "post": post,
+        "comments": comments,
+        "comment_form": comment_form -->
+<!--  -->
+        <!-- # user -->
+<!-- # title -->
+<!-- # image -->
+<!-- # publish -->
+<!-- # content -->
+<!-- # slug -->

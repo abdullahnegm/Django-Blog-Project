@@ -18,6 +18,13 @@ urlpatterns = [
     path("auth/add/category", views.add_categories),
     path("auth/category_details/<category_id>", views.categories_details),
     path("auth/category/edit/<category_id>", views.edit_categories),
-    path("auth/category/delete/<category_id>", views.delete_categories)
+    path("auth/category/delete/<category_id>", views.delete_categories),
 
+
+    # posts urls
+    path("auth/posts", views.all_posts,name="allposts"),
+    path("auth/add/post", views.add_posts,name="addnewpost"),
+    path("auth/post_details/<slug>", views.posts_details,name="postdetails"),
+    path("auth/post/edit/<slug>", views.edit_posts,name="editpost"),
+    path("auth/post/delete/<slug>", views.delete_posts,name="deletepost")
 ]

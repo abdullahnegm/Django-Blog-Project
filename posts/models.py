@@ -20,22 +20,22 @@ class Category(models.Model):
 #     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 
-class Post(models.Model):
+class Post(models.Model): 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     content = models.TextField(max_length=600)
     image = models.ImageField(upload_to="posts")
     publish = models.DateField(auto_now_add=True)
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, related_name="categories", blank=True) 
     slug = models.SlugField(primary_key=True, db_index=True)
     likes = models.ManyToManyField(User, related_name="likes", blank=True)
     dislikes = models.ManyToManyField(
         User, related_name="dislikes", blank=True)
     # tags
-
-    def save(self, **kwargs):
-        self.slug = slugify(self.title)
-        super(Post, self).save(**kwargs)
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super(Post, self).save(*args, **kwargs)
 
     def like_count(self):
         return self.likes.count()
