@@ -37,9 +37,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="#" class="nav-link" data-widget="navbar-search" role="button">Search</a>
                 </li>
+                {%if user.username%}
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="{% url 'posts:create' %}" class="nav-link">Create Post</a>
                 </li>
+                {%endif%}
             </ul>
 
             <!-- Right navbar links -->

@@ -9,6 +9,7 @@ from .forms import *
 from comments.forms import *
 from FinalBlog.settings import MEDIA_ROOT
 import os
+# from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -79,6 +80,7 @@ def like(request, slug, is_liked):
 def subscribe(request, id):
     pass
 
+# @login_required
 def create(request):
     form = postForm(request.POST or None, request.FILES or None)
     if request.method == 'POST' and form.is_valid():
