@@ -16,6 +16,9 @@ import os
 def home(request):
     categories = Category.objects.all()
     
+    post = Post.objects.get(slug="laravellaravel")
+    for cat in post.categories.all():
+        print(cat)
     if 'category' in request.GET and categories.filter(name = request.GET['category']):
         posts = Post.objects.filter(categories__name = request.GET['category'])
     else:
@@ -26,7 +29,6 @@ def home(request):
         "categories": categories
     }
     return render(request, 'posts/home.html', context)
-
 
 def detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
@@ -46,36 +48,6 @@ def detail(request, slug):
     return render(request, 'posts/detail.html', context)
 
 
-def search(request):
-    field = request.GET['search']
-    posts = Post.objects.filter(Q(title__icontains=field) | Q(
-        content__icontains=field))  # change it to tags later
-    categories = Category.objects.all()
-
-    context = {
-        "posts": posts,
-        "categories": categories
-    }
-    return render(request, 'posts/home.html', context)
-
-
-def like(request, slug, is_liked):
-    post = get_object_or_404(Post, slug=slug)
-    if is_liked == "True":
-        post.likes.remove(request.user)
-        post.dislikes.add(request.user)
-    else:
-        post.likes.add(request.user)
-        post.dislikes.remove(request.user)
-    if post.dislikes.count() >= 10:
-        post.delete()
-        return redirect('posts:home')
-    return redirect(reverse('posts:detail', kwargs={"slug": slug}))
-
-
-def subscribe(request, id):
-    pass
-
 def create(request):
     form = postForm(request.POST or None, request.FILES or None)
     if request.method == 'POST' and form.is_valid():
@@ -87,6 +59,9 @@ def create(request):
             category = get_object_or_404(Category, id=int(id))
             post.categories.add(category)
 
+        if request.user.is_staff:
+            return redirect('dashboard:home')
+
         return redirect('posts:home')
 
     context = {
@@ -94,34 +69,9 @@ def create(request):
     }
     return render(request, "posts/create.html", context)
 
-def edit(request, slug):
+def delete(request, slug):
     post = get_object_or_404(Post, slug=slug)
     if request.user != post.user:
-        return redirect(reverse('posts:detail', kwargs={'slug': slug}))
-    form = postForm(request.POST or None, request.FILES or None, initial={
-        "title": post.title,
-        "content": post.content,
-        "image": post.image,
-        "categories": [ category.id for category in post.categories.all() ]
-        })
-    if request.method == 'POST' and form.is_valid():
-        if post.image != form.cleaned_data["image"]:
-            os.remove(os.path.join(MEDIA_ROOT, f"{post.image}"))
-
-        post.title=form.cleaned_data['title']
-        post.content=form.cleaned_data['content']
-        post.image=form.cleaned_data['image']
-        post.user = request.user
-        post.save()
-
-        for id in form.cleaned_data['categories']:
-            category = get_object_or_404(Category, id=int(id))
-            post.categories.add(category)
-
-        return redirect(reverse('posts:detail', kwargs={"slug":slug}))
-
-    context = {
-        "form": form,
-        "slug": slug
-    }
-    return render(request, 'posts/edit.html', context)
+        return redirect(reverse('posts:detail', kwargs={'slug':slug}))
+    post.delete()
+    return redirect('posts:home')
