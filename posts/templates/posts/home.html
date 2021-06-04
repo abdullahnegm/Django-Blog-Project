@@ -1,19 +1,18 @@
-<!DOCTYPE html>
-<html>
-  <head> </head>
-  <body>
-    <center>
+{%extends 'layout/base.html'%}
+{%block body_block %}
+  <div class="row" id="wrapper-body">
+    <div class="col-6 offset-2 ">
       {% for post in posts %}
-      <h1>{{ post.title }}</h1>
-      <br />
-      <h1>{{ post.content }}</h1>
-      <br />
-      <h1>{{ post.publish }}</h1>
-      <br />
-      <hr />
-      <hr />
-      <hr />
-      {% endfor %}
-    </center>
-  </body>
-</html>
+      <div class="card mt-5 " style="width: 25rem;" >
+        <a href="{% url 'posts:detail' post.slug %}"
+          ><img src="{{ post.image.url }}" height="290" class="card-img-top"/></a>
+        <div class="card-body">
+          <h3 class="card-title">{{ post.title }}</h3>
+          <p class="card-text">{{ post.content }}</p>
+          <p class="card-text">{{ post.publish }}</p>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+{% endblock %}

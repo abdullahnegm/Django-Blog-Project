@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'posts',
-    'comments'
+    'comments',
+    'dashboard'
 ]
 
 MIDDLEWARE = [
@@ -80,6 +81,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'blog',
+        # 'USER': 'django',
+        # 'PASSWORD': 'django',
+        # 'HOST': 'localhost',
+        # 'PORT': '8081',
     }
 }
 
@@ -126,6 +133,11 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = BASE_DIR / "uploads"
+
+
+# LOGIN_REDIRECT_URL = 'posts:home'  # app_name:url_name
+# LOGOUT_REDIRECT_URL = 'users:login'
+# LOGIN_URL = 'users:login'  # to override the default auth system login url
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
