@@ -1,0 +1,28 @@
+{%extends 'dashboard/layout/base.html'%}
+{% block title_block %}
+<h1>Badword Details</h1>
+<div class="mb-4">
+    <a href="/auth/badwords" class="btn btn-primary">Back</a>
+</div>
+{% endblock %}
+
+{% block body_block %}
+<div class="row">
+    <div class="col-6 offset-3">
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Badword</th>
+                    <th scope="col">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Badword</td>
+                    <td><h3>{{data.badword}}</h3></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

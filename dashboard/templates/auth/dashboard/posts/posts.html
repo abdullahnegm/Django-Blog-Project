@@ -1,0 +1,50 @@
+{%extends 'dashboard/layout/base.html'%}
+{% block title_block %}
+{% endblock %}
+{%block body_block %}
+
+<div class="container-fluid">
+    <div class="row">
+        
+        <div class="col-11 offset-1 text-center">
+        <div class=" mt-3">
+            <h1 class="alert alert-secondary">All Posts
+
+                <a href="/auth/add/post" class="btn btn-sm btn-primary mb-2 ml-2">Add New!</a>
+
+            </h1>
+        </div>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Posted By</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Image</th>
+                    <th scope="col" colspan="3">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for post in data%}
+                <tr>
+                    <td><a href="/auth/post_details/{{post.slug}}"><h5>{{post.user}}</h5></a></td>
+                    <td><h5>{{post.title}}</h5></td>
+                    <td>
+                        {% for category in post.categories.all %}
+                        <h5>{{category.name}}</h5>
+                        {% endfor %}
+                    
+                    </td>
+                    <td><img class="rounded-circle" src="{{ post.image.url }}" width="80" height="80"/></td>
+                    <td><a href="/auth/post/edit/{{post.slug}}" class="btn btn-secondary"><i class="fas fa-pen"></i></a></td>
+                    <td><a href="/auth/post/delete/{{post.slug}}" class="btn btn-danger"><i class="fas fa-times"></i></a></td>
+                    <td><a href="/auth/post_details/{{post.slug}}" class="btn btn-info"><i class="fas fa-eye"></i></a></td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

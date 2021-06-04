@@ -1,0 +1,33 @@
+{%extends 'dashboard/layout/base.html'%}
+{% block title_block %}
+
+{% endblock %}
+
+{% block body_block %}
+<div class="row">
+    <div class="col-6 offset-3 mt-5">
+        {% if editable %}
+            <h1 class="alert text-center alert-secondary w-100 mt-3">Update Word!</h1>
+        {%endif%}
+        
+        {% if not editable %}
+            <h1 class="alert text-center alert-secondary w-100 mt-3">Add New Word!</h1>
+        {% endif %}
+
+        <form method="POST" class="form-group">
+            {%csrf_token%}
+            {{badwords_form.as_p}}
+            
+            {% if editable %}
+                <button type="submit" class="btn btn-success form-control mb-3">Update</button>
+            {%endif%}
+            
+            {% if not editable %}
+                <button type="submit" class="btn btn-success form-control mb-3">Save</button>
+            {% endif %}
+
+            <button type="reset" class="btn btn-danger form-control">Clear</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

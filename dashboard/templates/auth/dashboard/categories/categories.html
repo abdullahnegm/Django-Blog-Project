@@ -1,0 +1,36 @@
+{%extends 'dashboard/layout/base.html'%}
+{% block title_block %}
+
+{% endblock %}
+{%block body_block %}
+
+<div class="row">
+    <div class="col-6 offset-3">
+        <div class=" mt-3 text-center">
+            <h1 class="alert alert-secondary">All Categories
+        
+                <a href="/auth/add/category" class="btn btn-sm btn-primary mb-2 ml-2">Add New!</a>
+        
+            </h1>
+        </div>
+        <table class="table table-bordered text-center">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Categories</th>
+                    <th scope="col" colspan="2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for category in data%}
+                <tr>
+                    <td><a href="/auth/category_details/{{category.id}}"><h5>{{category.name}}</h5></a></td>
+                    <td><a href="/auth/category/edit/{{category.id}}" class="btn btn-secondary"><i class="fas fa-eye"></a></td>
+                    <td><a href="/auth/category/delete/{{category.id}}" class="btn btn-danger"><i class="fas fa-times"></a></td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
