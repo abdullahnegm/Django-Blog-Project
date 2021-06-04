@@ -17,11 +17,9 @@ class Category(models.Model):
         return self.name
 
 
-
 # class Subscribe(models.Model):
 #     user = models.ManyToManyField(User, related_name="user")
 #     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
 
 
 class Post(models.Model):
@@ -32,20 +30,21 @@ class Post(models.Model):
     publish = models.DateField(auto_now_add = True)
     categories = models.ManyToManyField(Category, related_name="categories", blank=True)
     slug = models.SlugField(primary_key=True, db_index=True)
-    likes = models.ManyToManyField(User, related_name="likes", blank=True)
-    dislikes = models.ManyToManyField(User, related_name="dislikes", blank=True)
     # tags
 
     def save(self, **kwargs):
         self.slug = slugify(self.title)
         super(Post, self).save(**kwargs)
 
-    def like_count(self):
-        return self.likes.count()
-
-
     # class Meta:
     #     ordering = ['publish']
 
     def __str__(self):
         return self.title
+
+
+class Badwords(models.Model):
+    badword = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.badword
