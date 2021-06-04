@@ -1,0 +1,106 @@
+{%extends 'layout/base.html'%}
+{%block body_block %}
+{%load static%}
+    <div class="bg"></div>
+    <div class="card">
+      
+      <div class="top">
+        <p class="category">Nature</p>
+        
+          <img class="post-img" src="{{ post.image.url }}" />
+      </div>
+      
+      <div class="bottom">
+        <h2><a href="#">Mountains</a></h2>
+        <div class="author">
+          <div class="profile"></div>
+          <p class="name">By <a>Suzan Hill</a></p>
+        </div>
+        <p class="intro">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur consectetur mauris sed mauris sagittis, nec pretium metus posuere. </p>
+        <div class="info">
+          <ion-icon name="time"></ion-icon>
+          <p class="info">2 days ago</p>
+          <ion-icon name="chatboxes"></ion-icon>
+          <p class="info"><a>13 comments</a></p>
+        </div>
+      </div>
+    </div>
+
+    <center>
+    {% if user == post.user %}
+     <a class="btn btn-danger" href="{% url 'posts:edit' post.slug %}">Edit Post</a>  
+    {% endif %}
+    {% if user.is_superuser and not post.user.is_staff %}
+      <form method="POST" action="{% url 'users:promote' post.user.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="slug" value="{{ post.slug }}"/>
+        <input type="submit" value="Promote"/>
+      </form>
+    {% endif %}
+    <br />
+    <br />
+    </center>
+    <center>
+    {% if user.is_superuser and not post.user.is_superuser and not post.user.is_staff %}
+      <form method="POST" action="{% url 'users:block' post.user.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="slug" value="{{ post.slug }}"/>
+        <input type="submit" {% if post.user.is_active %} value="Block" {% else %} value="unblock" {% endif %} />
+      </form>
+    {% endif %}
+    <br />
+    <br />
+    </center>
+    <center>
+      <!-- <a href="{% url 'posts:detail' post.slug %}">
+       
+      </a> -->
+
+      <br />
+      <h1>{{ post.title }}</h1>
+      <br />
+      <h1>{{ post.content }}</h1>
+      <br />
+      <h1>{{ post.publish }}</h1>
+      {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'posts:like' post.slug is_liked %}">
+          {% csrf_token %}
+            <input type="submit" {% if is_liked %} style="background-color: red" {% endif %} value="Like"/>
+        </form>
+        <form method="POST" action="{% url 'posts:like' post.slug is_liked %}">
+            {% csrf_token %}
+            <input type="submit" {% if is_disliked %} style="background-color: red" {% endif %} value="Dislike"/>
+        </form>
+      {% endif %}
+      <h1 style="color: blue;"> likes: {{ post.like_count }} </h1>
+    </center>
+    <hr />
+    <hr />
+    <hr />
+    <form action="{% url 'comments:create' post.slug %}" method="POST">
+      {% csrf_token %}
+      {{ comment_form.as_p }}
+      <input type="submit" value="Comment"/>
+    </form>
+    <hr />
+    <hr />
+    <hr />
+    {% for comment in comments %} 
+      <h4>
+        {{ comment.content }} 
+         - {{ comment.user.username }}
+         - {{ comment.date }}
+      </h4>
+      {% for reply in comment.replies.all %} 
+        {{ reply.content }} 
+         - {{ reply.user.username }}
+         - {{ reply.date }}
+      {% endfor %}
+      <form action="{% url 'comments:create' post.slug %}" method="POST">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <input type="hidden" value="{{ comment.id }}" name="reply"/>
+        <input type="submit" value="Comment"/>
+      </form> 
+    {% endfor %}
+{% endblock %}
