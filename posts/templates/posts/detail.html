@@ -2,6 +2,7 @@
 {%block body_block %}
 {%load static%}
 <div class="card">
+  <!-- <div class="img"></div> -->
   <img class="post-img" src="{{ post.image.url }}" />
 
   <div>
@@ -75,15 +76,15 @@
     <form class="form" action="{% url 'comments:create' post.slug %}" method="POST">
       {% csrf_token %}
       {{ comment_form.as_p }}
-      <div class="text-center">
-        <input class="btn btn-sm btn-success" type="submit" value="Comment" />
+      <div class="text-center d-flex">
+        <input class="btn btn-sm btn-success ml-auto mr-4  " type="submit" value="Comment" />
       </div>
     </form>
 
     <hr />
 
     {% for comment in comments %}
-    <div class="ml-3">
+    <div class="ml-3 " >
       <h5 class="badge badge-info p-2 ml-2">{{ comment.user.username }}</h5>
       <h5 class="badge badge-dark p-2">{{ comment.date | timesince }}</h5>
       <div class="content-post">{{ comment.content }}</div>
@@ -104,8 +105,9 @@
         {% csrf_token %}
         {{ comment_form.as_p }}
         <input type="hidden" value="{{ comment.id }}" name="reply" />
-      <div class="text-center" id="comment-post">
-        <input class="btn btn-sm btn-success" type="submit" value="Comment" />
+      <div class="text-center d-flex" id="comment-post">
+        
+        <input class="btn btn-sm btn-secondary  ml-auto mr-4" type="submit" value="Reply" />
       
       </div>
       </form>
