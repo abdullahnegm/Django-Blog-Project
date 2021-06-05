@@ -32,7 +32,7 @@
 
 .card {
   margin: auto;
-  height: 500px;
+  /* height: 500px; */
   width: 500px;
   background-color: white;
   position: relative;
@@ -98,16 +98,21 @@ a:hover {
 .author {
  display: flex;
  align-items: center;
+ /* flex-direction: column; */
+/* float: left; */
 }
 
 .profile {
-  background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80);
+  /* background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80); */
+  background-image: url(https://cdn3.iconfinder.com/data/icons/vector-icons-6/96/256-512.png);
+  border-radius: 50%;
   background-size: cover;
   background-position: center;
   height: 36px;
   width: 36px;
-  border-radius: 50%;
   margin: 10px 0 10px 22px;
+  display: flex;
+  flex-direction: column;
 }
 
 .name {
@@ -137,3 +142,21 @@ ion-icon {
   display: flex;
   padding: 10px 8px 0 22px;
 }
+
+
+.likes{
+  border-radius: 800px;
+  text-align: center;
+  /* border:1px solid red; */
+  /* background: floralwhite; */
+  background-color: #fafafa;
+  color: darkblue;
+}
+
+.like > #good:hover {
+  border:2px solid red;
+  background-color: cornflowerblue;
+  
+}
+
+

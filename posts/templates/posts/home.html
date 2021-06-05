@@ -6,10 +6,10 @@
       <div class="card mt-5 " style="width: 25rem;" >
         <a href="{% url 'posts:detail' post.slug %}"
           ><img src="{{ post.image.url }}" height="290" class="card-img-top"/></a>
-        <div class="card-body">
-          <h3 class="card-title">{{ post.title }}</h3>
-          <p class="card-text">{{ post.content }}</p>
-          <p class="card-text">{{ post.publish }}</p>
+        <div class="card-body" style="text-align: center;">
+          <h3 style="color: green; font-size: larger; font-weight: bold;">{{ post.title }}</h3>
+          <p class="card-text">{{ post.content | truncatechars:120 }}</p>
+          <p class="card-text" style="color: crimson;"  >{{ post.publish | timesince}} ago</p>
         </div>
       </div>
     {% endfor %}

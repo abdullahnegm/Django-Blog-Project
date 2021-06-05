@@ -1,106 +1,98 @@
 {%extends 'layout/base.html'%}
 {%block body_block %}
 {%load static%}
-    <div class="bg"></div>
-    <div class="card">
-      
-      <div class="top">
-        <p class="category">Nature</p>
-        
-          <img class="post-img" src="{{ post.image.url }}" />
-      </div>
-      
-      <div class="bottom">
-        <h2><a href="#">Mountains</a></h2>
-        <div class="author">
-          <div class="profile"></div>
-          <p class="name">By <a>Suzan Hill</a></p>
-        </div>
-        <p class="intro">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur consectetur mauris sed mauris sagittis, nec pretium metus posuere. </p>
-        <div class="info">
-          <ion-icon name="time"></ion-icon>
-          <p class="info">2 days ago</p>
-          <ion-icon name="chatboxes"></ion-icon>
-          <p class="info"><a>13 comments</a></p>
-        </div>
-      </div>
-    </div>
+<div class="card">
+  <img class="post-img" src="{{ post.image.url }}" />
 
-    <center>
-    {% if user == post.user %}
-     <a class="btn btn-danger" href="{% url 'posts:edit' post.slug %}">Edit Post</a>  
-    {% endif %}
-    {% if user.is_superuser and not post.user.is_staff %}
+  <div>
+    <h2 class="text-center" style="color: crimson;">{{ post.title }}</h2>
+    <div class="author">
+      <div class="profile"></div>
+      <div class="name">By <a>{{post.user}}</a></div> &nbsp;&nbsp;&nbsp;
+      {% if user == post.user %}
+      <a class="" href="{% url 'posts:edit' post.slug %}">Edit Post</a>
+      {% endif %}
+      {% if user.is_superuser and not post.user.is_staff %}
       <form method="POST" action="{% url 'users:promote' post.user.id %}">
         {% csrf_token %}
-        <input type="hidden" name="slug" value="{{ post.slug }}"/>
-        <input type="submit" value="Promote"/>
+        <input type="hidden" name="slug" value="{{ post.slug }}" />
+        <input type="submit" value="Promote" />
       </form>
-    {% endif %}
-    <br />
-    <br />
-    </center>
-    <center>
-    {% if user.is_superuser and not post.user.is_superuser and not post.user.is_staff %}
-      <form method="POST" action="{% url 'users:block' post.user.id %}">
-        {% csrf_token %}
-        <input type="hidden" name="slug" value="{{ post.slug }}"/>
-        <input type="submit" {% if post.user.is_active %} value="Block" {% else %} value="unblock" {% endif %} />
-      </form>
-    {% endif %}
-    <br />
-    <br />
-    </center>
-    <center>
-      <!-- <a href="{% url 'posts:detail' post.slug %}">
-       
-      </a> -->
+      {% endif %}
+    </div>
 
-      <br />
-      <h1>{{ post.title }}</h1>
-      <br />
-      <h1>{{ post.content }}</h1>
-      <br />
-      <h1>{{ post.publish }}</h1>
-      {% if user.is_authenticated %}
+    <p class="intro">{{ post.content }}</p>
+    <div class="info">
+
+        {% if user.is_superuser and not post.user.is_superuser and not post.user.is_staff %}
+        <form method="POST" action="{% url 'users:block' post.user.id %}">
+          {% csrf_token %}
+          <input type="hidden" name="slug" value="{{ post.slug }}" />
+          <input type="submit" {% if post.user.is_active %} value="Block" {% else %} value="unblock" {% endif %} />
+        </form>
+        {% endif %}
+      
+
+      <span class="likes info" style="margin-left: 20px;">
+        {% if user.is_authenticated %}
+        {% if not is_liked %}
         <form method="POST" action="{% url 'posts:like' post.slug is_liked %}">
           {% csrf_token %}
-            <input type="submit" {% if is_liked %} style="background-color: red" {% endif %} value="Like"/>
+          <button  type="submit" style=" border-radius: 600px; border: none; background-color: #fafafa; ">
+            <i  class="far fa-thumbs-up"></i>
+          </button>
         </form>
+
+        {% else %}
         <form method="POST" action="{% url 'posts:like' post.slug is_liked %}">
-            {% csrf_token %}
-            <input type="submit" {% if is_disliked %} style="background-color: red" {% endif %} value="Dislike"/>
+          {% csrf_token %}
+          <button id="bad"  type="submit" style="border-radius: 600px; border: none; background-color: #fafafa;">
+            <i class="far fa-thumbs-down"></i>
+          </button>
         </form>
-      {% endif %}
-      <h1 style="color: blue;"> likes: {{ post.like_count }} </h1>
-    </center>
-    <hr />
-    <hr />
-    <hr />
-    <form action="{% url 'comments:create' post.slug %}" method="POST">
-      {% csrf_token %}
-      {{ comment_form.as_p }}
-      <input type="submit" value="Comment"/>
-    </form>
-    <hr />
-    <hr />
-    <hr />
-    {% for comment in comments %} 
-      <h4>
-        {{ comment.content }} 
-         - {{ comment.user.username }}
-         - {{ comment.date }}
-      </h4>
-      {% for reply in comment.replies.all %} 
-        {{ reply.content }} 
-         - {{ reply.user.username }}
-         - {{ reply.date }}
-      {% endfor %}
-      <form action="{% url 'comments:create' post.slug %}" method="POST">
-        {% csrf_token %}
-        {{ comment_form.as_p }}
-        <input type="hidden" value="{{ comment.id }}" name="reply"/>
-        <input type="submit" value="Comment"/>
-      </form> 
-    {% endfor %}
+        {% endif %}
+        {% endif %}
+        <!-- <h1 style="color: blue;"> likes: {{ post.like_count }} </h1> -->
+      </span>
+
+      <ion-icon name="time"></ion-icon>
+      <p class="info">{{ post.publish | timesince }}</p>
+      <ion-icon name="chatboxes"></ion-icon>
+      <p class="info">{{post.comments.all.count}} Comments</p>
+      <div class="likes">
+        <p class="info"> likes: {{ post.like_count }} </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<hr />
+
+<form action="{% url 'comments:create' post.slug %}" method="POST">
+  {% csrf_token %}
+  {{ comment_form.as_p }}
+  <input type="submit" value="Comment" />
+</form>
+<hr />
+<hr />
+<hr />
+{% for comment in comments %}
+<h4>
+  {{ comment.content }}
+  - {{ comment.user.username }}
+  - {{ comment.date }}
+</h4>
+{% for reply in comment.replies.all %}
+{{ reply.content }}
+- {{ reply.user.username }}
+- {{ reply.date }}
+{% endfor %}
+<form action="{% url 'comments:create' post.slug %}" method="POST">
+  {% csrf_token %}
+  {{ comment_form.as_p }}
+  <input type="hidden" value="{{ comment.id }}" name="reply" />
+  <input type="submit" value="Comment" />
+</form>
+{% endfor %}
 {% endblock %}
