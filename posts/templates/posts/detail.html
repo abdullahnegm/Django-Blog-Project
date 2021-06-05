@@ -70,7 +70,7 @@
 
 
   <hr>
-
+  {% if user.is_authenticated %}
   <div class=" add-comment" style="width: 100%;">
 
     <form class="form" action="{% url 'comments:create' post.slug %}" method="POST">
@@ -114,6 +114,7 @@
       {% endfor %}
     </div>
   </div>
+  {%endif%}
 </div>
 
 {% endblock %}
