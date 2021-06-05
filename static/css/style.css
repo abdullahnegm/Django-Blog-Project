@@ -79,6 +79,9 @@ p {
   padding: 0 22px;
   line-height: 24px;
 }
+form > p > label {
+  display: none;
+}
 
 .intro {
   width: 85%;
@@ -159,11 +162,28 @@ ion-icon {
   
 }
 
-
-.add-comment{
-
-  background-color: #fafafa;
-  /* padding: 20px; */
-  margin: auto
+.content-post{
+  width: 93%;
+  margin-left: 7px;
+  margin-top: 10px ;
+  margin-bottom: 25px;
+  padding: 10px;
+  
+  background: #f8f9fa ;
+  font-size: 16px;
+  font-family: 'Courier New', Courier, monospace;
+  box-shadow: 0 1px 1px 1px #999;
+  border-radius: 12px;
 
 }
+#comment-post{
+  margin-bottom: 15px;
+}
+
+/* .add-comment{
+
+  background-color: #fafafa;
+  padding: 20px;
+  margin: auto
+
+} */

@@ -13,27 +13,18 @@
                     </div>
                     <div class="post-content">
                         <div class="card mb-3">
-                            <img
-                                src="{{post.image.url}}"
-                                class="card-img-top"
-                                alt="{{post.title}}"
-                            />
+                            <img src="{{post.image.url}}" class="card-img-top" alt="{{post.title}}" />
                             <div class="card-body">
                                 <h5 class="card-title">{{post.title}}</h5>
                                 <p class="card-text">{{post.content }}</p>
                                 <div class="d-flex justify-content-between">
                                     <p class="card-text">
-                                        <small class="text-muted"
-                                            >{{post.publish | timesince}}</small
-                                        >
+                                        <small class="text-muted">{{post.publish | timesince}}</small>
                                     </p>
                                     {% if user == post.user %}
                                     <button class="btn btn-primary mb-3">
-                                        <a
-                                            class="text-light"
-                                            href="{% url 'dashboard:editpost' post.slug %}"
-                                            >Edit Post</a
-                                        >
+                                        <a class="text-light" href="{% url 'dashboard:editpost' post.slug %}">Edit
+                                            Post</a>
                                     </button>
                                     {% endif %}
                                 </div>
@@ -42,36 +33,7 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="row">
 
-                <form action="{% url 'comments:create' post.slug %}" method="POST">
-                    {% csrf_token %}
-                    {{ comment_form.as_p }}
-                    <input type="submit" value="Comment"/>
-                  </form>
-                  <hr />
-                  <hr />
-                  <hr />
-                  {% for comment in comments %} 
-                    <h4>
-                      {{ comment.content }} 
-                       - {{ comment.user.username }}
-                       - {{ comment.date }}
-                    </h4>
-                    {% for reply in comment.replies.all %} 
-                      {{ reply.content }} 
-                       - {{ reply.user.username }}
-                       - {{ reply.date }}
-                    {% endfor %}
-                    <form action="{% url 'comments:create' post.slug %}" method="POST">
-                      {% csrf_token %}
-                      {{ comment_form.as_p }}
-                      <input type="hidden" value="{{ comment.id }}" name="reply"/>
-                      <input type="submit" value="Comment"/>
-                    </form> 
-                  {% endfor %}
-
-            </div> -->
         </div>
     </div>
 </div>

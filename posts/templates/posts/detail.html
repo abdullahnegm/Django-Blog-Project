@@ -70,37 +70,48 @@
 
   <hr>
 
-  <div class="add-comment">
+  <div class=" add-comment" style="width: 100%;">
 
-    <form action="{% url 'comments:create' post.slug %}" method="POST">
+    <form class="form" action="{% url 'comments:create' post.slug %}" method="POST">
       {% csrf_token %}
       {{ comment_form.as_p }}
-      <input type="submit" value="Comment" />
+      <div class="text-center">
+        <input class="btn btn-sm btn-success" type="submit" value="Comment" />
+      </div>
     </form>
 
     <hr />
 
-
     {% for comment in comments %}
-    <h4>
-      {{ comment.content }}
-      {{ comment.user.username }}
-      {{ comment.date }}
-    </h4>
-    {% for reply in comment.replies.all %}
-    {{ reply.content }}
-    - {{ reply.user.username }}
-    - {{ reply.date }}
-    {% endfor %}
-    <form action="{% url 'comments:create' post.slug %}" method="POST">
-      {% csrf_token %}
-      {{ comment_form.as_p }}
-      <input type="hidden" value="{{ comment.id }}" name="reply" />
-      <input type="submit" value="Comment" />
-    </form>
-    {% endfor %}
-  </div>
+    <div class="ml-3">
+      <h5 class="badge badge-info p-2 ml-2">{{ comment.user.username }}</h5>
+      <h5 class="badge badge-dark p-2">{{ comment.date | timesince }}</h5>
+      <div class="content-post">{{ comment.content }}</div>
+    </div>
 
+    {% for reply in comment.replies.all %}
+    <div class="replay ml-3">
+      <div class="ml-3">
+        <h5 class="badge badge-info p-1 ml-2">{{ reply.user.username }}</h5>
+        <h5 class="badge badge-dark p-1">{{ reply.date | timesince }}</h5>
+        <div class="content-post">{{ reply.content }}</div>
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="replay">
+      <form action="{% url 'comments:create' post.slug %}" method="POST">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <input type="hidden" value="{{ comment.id }}" name="reply" />
+      <div class="text-center" id="comment-post">
+        <input class="btn btn-sm btn-success" type="submit" value="Comment" />
+      
+      </div>
+      </form>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 
 {% endblock %}
