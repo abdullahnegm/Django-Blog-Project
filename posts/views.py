@@ -108,7 +108,7 @@ def edit(request, slug):
     post = get_object_or_404(Post, slug=slug)
     if request.user != post.user:
         return redirect(reverse('posts:detail', kwargs={'slug': slug}))
-    form = postForm(request.POST or None, request.FILES or None, initial={
+    form = PostsForm(request.POST or None, request.FILES or None, initial={
         "title": post.title,
         "content": post.content,
         "image": post.image,

@@ -1,12 +1,16 @@
 {%extends 'layout/base.html'%}
 {%block body_block %}
 
-    <center>
+<div class="row">
+    <div class="col-6 offset-3">
+        <h1 class="alert text-center alert-secondary w-100 mt-3">Edit Post!</h1>
+
         <form action="{% url 'posts:edit' slug %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
-            <input type="submit" value="Edit"/>
+            <input type="submit" class="btn btn-success form-control mb-3" value="Edit" />
         </form>
-    </center>
+    </div>
+</div>
 
 {% endblock %}
