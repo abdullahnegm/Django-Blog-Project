@@ -24,35 +24,34 @@
     <p class="intro">{{ post.content }}</p>
     <div class="info">
 
-        {% if user.is_superuser and not post.user.is_superuser and not post.user.is_staff %}
-        <form method="POST" action="{% url 'users:block' post.user.id %}">
-          {% csrf_token %}
-          <input type="hidden" name="slug" value="{{ post.slug }}" />
-          <input type="submit" {% if post.user.is_active %} value="Block" {% else %} value="unblock" {% endif %} />
-        </form>
-        {% endif %}
-      
+      {% if user.is_superuser and not post.user.is_superuser and not post.user.is_staff %}
+      <form method="POST" action="{% url 'users:block' post.user.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="slug" value="{{ post.slug }}" />
+        <input type="submit" {% if post.user.is_active %} value="Block" {% else %} value="unblock" {% endif %} />
+      </form>
+      {% endif %}
+
 
       <span class="likes info" style="margin-left: 20px;">
         {% if user.is_authenticated %}
         {% if not is_liked %}
         <form method="POST" action="{% url 'posts:like' post.slug is_liked %}">
           {% csrf_token %}
-          <button  type="submit" style=" border-radius: 600px; border: none; background-color: #fafafa; ">
-            <i  class="far fa-thumbs-up"></i>
+          <button type="submit" style=" border-radius: 600px; border: none; background-color: #fafafa; ">
+            <i class="far fa-thumbs-up"></i>
           </button>
         </form>
 
         {% else %}
         <form method="POST" action="{% url 'posts:like' post.slug is_liked %}">
           {% csrf_token %}
-          <button id="bad"  type="submit" style="border-radius: 600px; border: none; background-color: #fafafa;">
+          <button id="bad" type="submit" style="border-radius: 600px; border: none; background-color: #fafafa;">
             <i class="far fa-thumbs-down"></i>
           </button>
         </form>
         {% endif %}
         {% endif %}
-        <!-- <h1 style="color: blue;"> likes: {{ post.like_count }} </h1> -->
       </span>
 
       <ion-icon name="time"></ion-icon>
@@ -65,34 +64,43 @@
 
     </div>
   </div>
+
+
+
+
+  <hr>
+
+  <div class="add-comment">
+
+    <form action="{% url 'comments:create' post.slug %}" method="POST">
+      {% csrf_token %}
+      {{ comment_form.as_p }}
+      <input type="submit" value="Comment" />
+    </form>
+
+    <hr />
+
+
+    {% for comment in comments %}
+    <h4>
+      {{ comment.content }}
+      {{ comment.user.username }}
+      {{ comment.date }}
+    </h4>
+    {% for reply in comment.replies.all %}
+    {{ reply.content }}
+    - {{ reply.user.username }}
+    - {{ reply.date }}
+    {% endfor %}
+    <form action="{% url 'comments:create' post.slug %}" method="POST">
+      {% csrf_token %}
+      {{ comment_form.as_p }}
+      <input type="hidden" value="{{ comment.id }}" name="reply" />
+      <input type="submit" value="Comment" />
+    </form>
+    {% endfor %}
+  </div>
+
 </div>
 
-<hr />
-
-<form action="{% url 'comments:create' post.slug %}" method="POST">
-  {% csrf_token %}
-  {{ comment_form.as_p }}
-  <input type="submit" value="Comment" />
-</form>
-<hr />
-<hr />
-<hr />
-{% for comment in comments %}
-<h4>
-  {{ comment.content }}
-  - {{ comment.user.username }}
-  - {{ comment.date }}
-</h4>
-{% for reply in comment.replies.all %}
-{{ reply.content }}
-- {{ reply.user.username }}
-- {{ reply.date }}
-{% endfor %}
-<form action="{% url 'comments:create' post.slug %}" method="POST">
-  {% csrf_token %}
-  {{ comment_form.as_p }}
-  <input type="hidden" value="{{ comment.id }}" name="reply" />
-  <input type="submit" value="Comment" />
-</form>
-{% endfor %}
 {% endblock %}
