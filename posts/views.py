@@ -9,6 +9,8 @@ from .forms import *
 from comments.forms import *
 from FinalBlog.settings import MEDIA_ROOT
 import os
+from dashboard.forms import PostsForm
+
 # from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -82,7 +84,7 @@ def subscribe(request, id):
 
 # @login_required
 def create(request):
-    form = postForm(request.POST or None, request.FILES or None)
+    form = PostsForm(request.POST or None, request.FILES or None)
     if request.method == 'POST' and form.is_valid():
         post = Post(title=form.cleaned_data['title'], content=form.cleaned_data['content'] , image=form.cleaned_data['image'])
         post.user = request.user
