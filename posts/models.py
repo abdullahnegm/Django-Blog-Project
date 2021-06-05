@@ -27,7 +27,7 @@ class Post(models.Model):
     title = models.CharField(max_length = 50)
     content = models.TextField(max_length = 600)
     image = models.ImageField(upload_to = "posts")
-    publish = models.DateField(auto_now_add = True)
+    publish = models.DateTimeField(auto_now_add = True)
     categories = models.ManyToManyField(Category, related_name="categories", blank=True)
     slug = models.SlugField(primary_key=True, db_index=True)
     likes = models.ManyToManyField(User, related_name="likes", blank=True)
